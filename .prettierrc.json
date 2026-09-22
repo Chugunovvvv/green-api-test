@@ -1,0 +1,21 @@
+{
+  "arrowParens": "avoid",
+  "bracketSpacing": true,
+  "embeddedLanguageFormatting": "auto",
+  "endOfLine": "lf",
+  "htmlWhitespaceSensitivity": "css",
+  "printWidth": 80,
+  "quoteProps": "as-needed",
+  "semi": true,
+  "tabWidth": 4,
+  "trailingComma": "es5",
+
+  "overrides": [
+    {
+      "files": [".prettierrc.json", "package.json", "import-sorter.json"],
+      "options": {
+        "tabWidth": 2
+      }
+    }
+  ]
+}
