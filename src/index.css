@@ -1,0 +1,38 @@
+:root {
+    font-family: Arial, Helvetica, sans-serif;
+    color: #202124;
+    background: #ffffff;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    --color-primary: #356ae6;
+    --color-primary-dark: #2856c2;
+    --color-primary-light: #eaf0ff;
+    --color-border: #d8dce5;
+    --color-muted: #697386;
+    --color-error: #b42332;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+    min-width: 320px;
+    min-height: 100%;
+    margin: 0;
+}
+body {
+    min-height: 100vh;
+}
+
+button,
+input,
+textarea {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}

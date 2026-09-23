@@ -1,0 +1,41 @@
+.form {
+    border-bottom: 1px solid var(--color-border);
+    padding: 16px;
+}
+
+.form label {
+    display: grid;
+    gap: 6px;
+    font-size: 14px;
+}
+
+.form input {
+    height: 38px;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 0 8px;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.actions button {
+    min-height: 36px;
+    border: 1px solid var(--color-primary);
+    border-radius: 4px;
+    color: var(--color-primary);
+    background: white;
+}
+
+.actions button[type="submit"] {
+    color: white;
+    background: var(--color-primary);
+}
+
+.error {
+    color: var(--color-error);
+    font-size: 13px;
+}

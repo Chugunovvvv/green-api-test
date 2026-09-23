@@ -1,7 +1,15 @@
-import "./App.css";
+import { ChatPage } from "./components/ChatPage/ChatPage";
+import { CredentialsForm } from "./components/CredentialsForm/CredentialsForm";
+import { useChatStore } from "./store/chatStore";
 
 function App() {
-    return <div>green-api-test</div>;
+    const isConnected = useChatStore(state => state.credentials !== null);
+
+    if (!isConnected) {
+        return <CredentialsForm />;
+    }
+
+    return <ChatPage />;
 }
 
 export default App;

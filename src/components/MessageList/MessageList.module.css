@@ -1,0 +1,40 @@
+.list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.incoming,
+.outgoing {
+    width: fit-content;
+    max-width: 70%;
+    margin-bottom: 10px;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 8px 10px;
+}
+
+.outgoing {
+    margin-left: auto;
+    border-color: #c8d6ff;
+    background: var(--color-primary-light);
+}
+
+.incoming p,
+.outgoing p {
+    margin: 0 0 4px;
+    white-space: pre-wrap;
+}
+
+.incoming small,
+.outgoing small {
+    color: var(--color-muted);
+    font-size: 10px;
+}
+
+.empty {
+    flex: 1;
+    display: grid;
+    place-items: center;
+    color: var(--color-muted);
+}

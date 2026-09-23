@@ -1,75 +1,39 @@
-# React + TypeScript + Vite
+# Telegram Chat
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React-приложение для отправки и получения текстовых сообщений в Telegram через GREEN-API.
 
-Currently, two official plugins are available:
+## Запуск
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Для входа нужны только `idInstance` и `apiTokenInstance`. Базовый адрес API задаётся внутри клиента. При необходимости его можно переопределить переменной `VITE_GREEN_API_BASE_URL`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+Новый чат можно создать по номеру телефона в международном формате или по публичному имени пользователя Telegram в формате `@username`.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Настройка инстанса
 
+- инстанс должен иметь статус `authorized`;
+- настройка `incomingWebhook` должна иметь значение `yes`;
+- поле `webhookUrl` должно быть пустым.
+
+## Архитектура
+
+- `api/httpClient.ts` — настройка Axios и единая обработка HTTP-ошибок;
+- `api/greenApiError.ts` — ошибка GREEN-API и извлечение сообщения из ответа;
+- `api/greenApiClient.ts` — методы GREEN-API;
+- `api/mapIncomingMessage.ts` — преобразование уведомления в сообщение чата;
+- `services/NotificationPollingService.ts` — последовательный long polling, отмена запросов и backoff;
+- `model/chatStore.ts` — Zustand-store с состоянием сессии, чатов и действиями;
+- `components/` — небольшие компоненты интерфейса с отдельными CSS Modules.
+
+Polling-сервис держит только один запрос `ReceiveNotification`. После обработки уведомление подтверждается через `DeleteNotification`. При сетевой ошибке используется экспоненциальная задержка до следующей попытки.
+
+## Проверка
+
+```bash
+npm run build
+npm run lint
 ```

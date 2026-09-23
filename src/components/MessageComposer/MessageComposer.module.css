@@ -1,0 +1,35 @@
+.form {
+    border-top: 1px solid var(--color-border);
+    padding: 12px;
+}
+
+.form > div {
+    display: flex;
+    gap: 8px;
+}
+
+.form textarea {
+    flex: 1;
+    resize: vertical;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    padding: 8px;
+}
+
+.form button {
+    border: 0;
+    border-radius: 4px;
+    padding: 0 18px;
+    color: white;
+    background: var(--color-primary);
+}
+
+.form button:disabled {
+    opacity: 0.5;
+}
+
+.form p {
+    margin: 0 0 8px;
+    color: var(--color-error);
+    font-size: 13px;
+}
