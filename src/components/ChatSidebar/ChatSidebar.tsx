@@ -4,8 +4,8 @@ import styles from "./ChatSidebar.module.css";
 import { ChatSidebarHeader } from "./ChatSidebarHeader";
 
 const CONNECTION_PRESENTATION = {
-    connecting: {
-        text: "Подключение...",
+    ready: {
+        text: "Создайте чат для получения сообщений",
         className: styles.connection,
     },
     online: {

@@ -4,7 +4,7 @@ import { NotificationPollingService } from "../services/NotificationPollingServi
 import type { Chat, Credentials, IncomingMessage, Message } from "../types";
 import { formatCorrespondent } from "../utils/correspondent";
 
-type ConnectionState = "connecting" | "online" | "reconnecting";
+type ConnectionState = "ready" | "online" | "reconnecting";
 
 type OpenedChat = Chat & {
     receiveMessagesFrom: number;
@@ -32,7 +32,7 @@ const initialSessionState = {
     chats: [],
     activeChatId: null,
     isNewChatOpen: false,
-    connection: "connecting" as const,
+    connection: "ready" as const,
     connectionError: null,
 };
 
@@ -98,7 +98,7 @@ export const useChatStore = create<ChatStore>((set, get) => ({
         set({
             ...initialSessionState,
             credentials,
-            connection: "online",
+            connection: "ready",
         });
 
         pollingService = new NotificationPollingService(client, {
@@ -116,7 +116,6 @@ export const useChatStore = create<ChatStore>((set, get) => ({
                 }
             },
         });
-        pollingService.start();
     },
 
     disconnect: () => {
@@ -168,8 +167,12 @@ export const useChatStore = create<ChatStore>((set, get) => ({
                 chats: chatAlreadyExists ? state.chats : [chat, ...state.chats],
                 activeChatId: chatId,
                 isNewChatOpen: false,
+                connection: "online",
+                connectionError: null,
             };
         });
+
+        pollingService?.start();
     },
 
     selectChat: chatId => {
