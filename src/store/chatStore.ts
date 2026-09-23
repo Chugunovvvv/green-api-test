@@ -6,9 +6,13 @@ import { formatCorrespondent } from "../utils/correspondent";
 
 type ConnectionState = "connecting" | "online" | "reconnecting";
 
+type OpenedChat = Chat & {
+    receiveMessagesFrom: number;
+};
+
 type ChatStore = {
     credentials: Credentials | null;
-    chats: Chat[];
+    chats: OpenedChat[];
     activeChatId: string | null;
     isNewChatOpen: boolean;
     connection: ConnectionState;
@@ -38,10 +42,10 @@ let connectionAttempt = 0;
 let sessionVersion = 0;
 
 function updateChat(
-    chats: Chat[],
+    chats: OpenedChat[],
     chatId: string,
-    updater: (chat: Chat) => Chat
-): Chat[] {
+    updater: (chat: OpenedChat) => OpenedChat
+): OpenedChat[] {
     return chats.map(chat => (chat.chatId === chatId ? updater(chat) : chat));
 }
 
@@ -53,19 +57,9 @@ function addIncomingMessage(
         chat => chat.chatId === payload.chatId
     );
 
-    if (!existingChat) {
-        const chat: Chat = {
-            chatId: payload.chatId,
-            correspondent: payload.correspondent,
-            title: payload.title,
-            messages: [payload.message],
-            unreadCount: 1,
-        };
-
-        return { chats: [chat, ...state.chats] };
-    }
-
     if (
+        !existingChat ||
+        payload.message.timestamp < existingChat.receiveMessagesFrom ||
         existingChat.messages.some(message => message.id === payload.message.id)
     ) {
         return state;
@@ -161,12 +155,13 @@ export const useChatStore = create<ChatStore>((set, get) => ({
             const chatAlreadyExists = state.chats.some(
                 chat => chat.chatId === chatId
             );
-            const chat: Chat = {
+            const chat: OpenedChat = {
                 chatId,
                 correspondent,
                 title: formatCorrespondent(correspondent),
                 messages: [],
                 unreadCount: 0,
+                receiveMessagesFrom: Math.floor(Date.now() / 1_000) * 1_000,
             };
 
             return {
